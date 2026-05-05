@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'dart:ui' as ui;
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../widgets/location_risk_detail_sheet.dart';
 
 class MapExplorerScreen extends StatefulWidget {
   const MapExplorerScreen({super.key});
@@ -69,9 +71,13 @@ class _MapExplorerScreenState extends State<MapExplorerScreen> {
                     point: const LatLng(-6.200000, 106.816666),
                     width: 48,
                     height: 48,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
+                    child: GestureDetector(
+                      onTap: () {
+                        LocationRiskDetailSheet.show(context);
+                      },
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
                         Container(
                           width: 48,
                           height: 48,
@@ -272,7 +278,7 @@ class _MapExplorerScreenState extends State<MapExplorerScreen> {
               child: IconButton(
                 icon: const Icon(Icons.add, size: 32, color: AppColors.onPrimary),
                 onPressed: () {
-                  // TODO: Open Report form or bottom sheet
+                  context.go('/report');
                 },
               ),
             ),
