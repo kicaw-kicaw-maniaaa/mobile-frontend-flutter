@@ -147,13 +147,15 @@ class ReportHistoryScreen extends StatelessWidget {
                 bottom: 0,
                 width: 4,
                 child: Container(
-                  color: statusColor.withAlpha(200),
-                  boxShadow: [
-                    BoxShadow(
-                      color: statusColor.withAlpha(128),
-                      blurRadius: 10,
-                    ),
-                  ],
+                  decoration: BoxDecoration(
+                    color: statusColor.withAlpha(200),
+                    boxShadow: [
+                      BoxShadow(
+                        color: statusColor.withAlpha(128),
+                        blurRadius: 10,
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Padding(

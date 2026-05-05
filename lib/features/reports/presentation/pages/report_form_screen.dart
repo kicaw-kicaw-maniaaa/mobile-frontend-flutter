@@ -194,7 +194,16 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
                 _buildSectionContainer(
                   title: 'Bukti Visual',
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: const Text('Integrasi Kamera dan Galeri akan aktif setelah backend siap.'),
+                          backgroundColor: AppColors.surfaceContainerHigh,
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        ),
+                      );
+                    },
                     borderRadius: BorderRadius.circular(8),
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 32),
@@ -325,7 +334,7 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              if (headerTrailing != null) headerTrailing,
+              ?headerTrailing,
             ],
           ),
           const SizedBox(height: 12),

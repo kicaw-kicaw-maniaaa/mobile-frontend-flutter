@@ -81,10 +81,10 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: AppColors.accentCyan.withOpacity(0.5), width: 1),
+                            border: Border.all(color: AppColors.accentCyan.withAlpha(128), width: 1),
                             boxShadow: [
                               BoxShadow(
-                                color: AppColors.accentCyan.withOpacity(0.8),
+                                color: AppColors.accentCyan.withAlpha(204),
                                 blurRadius: 20,
                               ),
                             ],
@@ -95,7 +95,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: AppColors.accentCyan.withOpacity(0.3), width: 1),
+                            border: Border.all(color: AppColors.accentCyan.withAlpha(76), width: 1),
                           ),
                           width: 160,
                           height: 160,
@@ -119,7 +119,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                       letterSpacing: 2.0,
                       shadows: [
                         Shadow(
-                          color: AppColors.accentCyan.withOpacity(0.5),
+                          color: AppColors.accentCyan.withAlpha(128),
                           blurRadius: 8,
                         ),
                       ],
@@ -183,13 +183,13 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                       Icon(
                         Icons.sensors,
                         size: 14,
-                        color: AppColors.accentCyan.withOpacity(0.7),
+                        color: AppColors.accentCyan.withAlpha(178),
                       ),
                       const SizedBox(width: 8),
                       Text(
                         'INITIALIZING SECURE UPLINK',
                         style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                          color: AppColors.accentCyan.withOpacity(0.7),
+                          color: AppColors.accentCyan.withAlpha(178),
                           letterSpacing: 2.0,
                         ),
                       ),
@@ -212,14 +212,14 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   'SYS.VER.2.4.01',
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
                     fontSize: 10,
-                    color: AppColors.textSecondary.withOpacity(0.5),
+                    color: AppColors.textSecondary.withAlpha(128),
                   ),
                 ),
                 Text(
                   'SECURE: AES-256',
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
                     fontSize: 10,
-                    color: AppColors.accentCyan.withOpacity(0.5),
+                    color: AppColors.accentCyan.withAlpha(128),
                   ),
                 ),
               ],
@@ -235,7 +235,7 @@ class GridPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = AppColors.accentCyan.withOpacity(0.05)
+      ..color = AppColors.accentCyan.withAlpha(13)
       ..strokeWidth = 1;
 
     const double gridSize = 40.0;

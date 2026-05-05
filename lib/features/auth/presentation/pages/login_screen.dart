@@ -18,7 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: AppColors.surfaceMain,
       appBar: AppBar(
-        backgroundColor: AppColors.surfaceContainer.withOpacity(0.8),
+        backgroundColor: AppColors.surfaceContainer.withAlpha(204),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {},
@@ -51,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.accentCyan.withOpacity(0.1),
+                color: AppColors.accentCyan.withAlpha(25),
               ),
               child: BackdropFilter(
                 filter: ui.ImageFilter.blur(sigmaX: 100, sigmaY: 100),
@@ -71,12 +71,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: 64,
                     height: 64,
                     decoration: BoxDecoration(
-                      color: AppColors.surfaceContainer.withOpacity(0.5),
+                      color: AppColors.surfaceContainer.withAlpha(128),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(color: AppColors.borderMuted),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.accentCyan.withOpacity(0.15),
+                          color: AppColors.accentCyan.withAlpha(38),
                           blurRadius: 20,
                         ),
                       ],
@@ -106,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: double.infinity,
                     constraints: const BoxConstraints(maxWidth: 400),
                     decoration: BoxDecoration(
-                      color: AppColors.surfaceContainer.withOpacity(0.8),
+                      color: AppColors.surfaceContainer.withAlpha(204),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(color: AppColors.borderMuted),
                       boxShadow: const [
@@ -229,7 +229,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       color: AppColors.safeGreen,
                                       boxShadow: [
                                         BoxShadow(
-                                          color: AppColors.safeGreen.withOpacity(0.6),
+                                          color: AppColors.safeGreen.withAlpha(153),
                                           blurRadius: 8,
                                         ),
                                       ],
@@ -258,7 +258,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.labelMedium?.copyWith(
                       fontSize: 10,
-                      color: AppColors.textSecondary.withOpacity(0.6),
+                      color: AppColors.textSecondary.withAlpha(153),
                       letterSpacing: 1.5,
                       height: 1.5,
                     ),
@@ -277,7 +277,7 @@ class RadialGridPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = AppColors.accentCyan.withOpacity(0.05)
+      ..color = AppColors.accentCyan.withAlpha(13)
       ..style = PaintingStyle.fill;
 
     const double spacing = 24.0;

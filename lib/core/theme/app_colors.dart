@@ -25,4 +25,17 @@ class AppColors {
   
   // Borders & Dividers
   static const Color borderMuted = Color(0xFF334155);
+  static const Color outlineVariant = Color(0xFF3d494c);
+  
+  // Additional Surfaces
+  static const Color surfaceVariant = Color(0xFF303638);
+  static const Color surfaceContainerHigh = Color(0xFF252b2d);
+  static const Color surfaceDim = Color(0xFF0e1416);
+  
+  // Additional On-Colors
+  static const Color onSurfaceVariant = Color(0xFFbcc9cd);
+  static const Color onTertiaryContainer = Color(0xFF5b3200);
+  
+  // Additional Semantic
+  static const Color tertiaryContainer = Color(0xFFe89337);
 }

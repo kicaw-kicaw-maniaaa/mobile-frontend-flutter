@@ -299,7 +299,7 @@ class ProfileScreen extends StatelessWidget {
           Switch(
             value: initialValue,
             onChanged: (val) {},
-            activeColor: AppColors.accentCyan,
+            activeThumbColor: AppColors.accentCyan,
             activeTrackColor: AppColors.accentCyan.withAlpha(100),
             inactiveThumbColor: AppColors.textSecondary,
             inactiveTrackColor: AppColors.surfaceVariant,

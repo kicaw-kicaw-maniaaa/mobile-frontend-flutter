@@ -64,9 +64,10 @@ class _MapExplorerScreenState extends State<MapExplorerScreen> {
                   ),
                 ],
               ),
-              // User Marker
+              // Region Markers (Interactive)
               MarkerLayer(
                 markers: [
+                  // User Location / Region A
                   Marker(
                     point: const LatLng(-6.200000, 106.816666),
                     width: 48,
@@ -78,37 +79,89 @@ class _MapExplorerScreenState extends State<MapExplorerScreen> {
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
-                        Container(
-                          width: 48,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.accentCyan.withAlpha(50),
+                          Container(
+                            width: 48,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.accentCyan.withAlpha(50),
+                            ),
                           ),
-                        ),
-                        Container(
-                          width: 24,
-                          height: 24,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.accentCyan.withAlpha(100),
+                          Container(
+                            width: 24,
+                            height: 24,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.accentCyan.withAlpha(100),
+                            ),
                           ),
-                        ),
-                        Container(
-                          width: 12,
-                          height: 12,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.accentCyan,
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppColors.accentCyan,
-                                blurRadius: 10,
-                              ),
-                            ],
+                          Container(
+                            width: 12,
+                            height: 12,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.accentCyan,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.accentCyan,
+                                  blurRadius: 10,
+                                ),
+                              ],
+                            ),
                           ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  // Danger Zone Marker
+                  Marker(
+                    point: const LatLng(-6.215, 106.835),
+                    width: 40,
+                    height: 40,
+                    child: GestureDetector(
+                      onTap: () {
+                        LocationRiskDetailSheet.show(context);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.surfaceMain.withAlpha(200),
+                          shape: BoxShape.circle,
+                          border: Border.all(color: AppColors.dangerRose),
+                          boxShadow: [
+                            BoxShadow(color: AppColors.dangerRose.withAlpha(100), blurRadius: 10),
+                          ],
                         ),
-                      ],
+                        child: const Icon(Icons.warning, color: AppColors.dangerRose, size: 20),
+                      ),
+                    ),
+                  ),
+                  // Safe Zone Marker
+                  Marker(
+                    point: const LatLng(-6.195, 106.815),
+                    width: 40,
+                    height: 40,
+                    child: GestureDetector(
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: const Text('Kawasan Aman: Tidak ada risiko terdeteksi.'),
+                            backgroundColor: AppColors.safeGreen,
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.surfaceMain.withAlpha(200),
+                          shape: BoxShape.circle,
+                          border: Border.all(color: AppColors.safeGreen),
+                          boxShadow: [
+                            BoxShadow(color: AppColors.safeGreen.withAlpha(100), blurRadius: 10),
+                          ],
+                        ),
+                        child: const Icon(Icons.verified, color: AppColors.safeGreen, size: 20),
+                      ),
                     ),
                   ),
                 ],
@@ -298,7 +351,16 @@ class _MapExplorerScreenState extends State<MapExplorerScreen> {
               ),
               child: IconButton(
                 icon: const Icon(Icons.layers, color: AppColors.accentCyan),
-                onPressed: () {},
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text('Map Layers menu akan tersedia setelah integrasi data spasial.'),
+                      backgroundColor: AppColors.surfaceContainerHigh,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    ),
+                  );
+                },
               ),
             ),
           ),
