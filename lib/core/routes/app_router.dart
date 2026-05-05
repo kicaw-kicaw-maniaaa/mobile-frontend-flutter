@@ -8,6 +8,7 @@ import '../../features/auth/presentation/pages/login_screen.dart';
 import '../../features/auth/presentation/pages/profile_screen.dart';
 import '../../features/map/presentation/pages/map_explorer_screen.dart';
 import '../../features/reports/presentation/pages/report_form_screen.dart';
+import '../../features/reports/presentation/pages/report_history_screen.dart';
 import '../../features/alerts/presentation/pages/notification_center_screen.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -63,6 +64,12 @@ class AppRouter {
               GoRoute(
                 path: '/profile',
                 builder: (context, state) => const ProfileScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'history',
+                    builder: (context, state) => const ReportHistoryScreen(),
+                  ),
+                ],
               ),
             ],
           ),
