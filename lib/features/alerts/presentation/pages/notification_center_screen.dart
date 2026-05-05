@@ -1,11 +1,76 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 
-class NotificationCenterScreen extends StatelessWidget {
+class NotificationCenterScreen extends StatefulWidget {
   const NotificationCenterScreen({super.key});
 
   @override
+  State<NotificationCenterScreen> createState() => _NotificationCenterScreenState();
+}
+
+class _NotificationCenterScreenState extends State<NotificationCenterScreen> {
+  String _searchQuery = '';
+  
+  final List<Map<String, dynamic>> _alertsData = [
+    {
+      'title': 'Critical Flood Level',
+      'level': 'BAHAYA',
+      'time': '14:22',
+      'description': 'Water levels in Sector 4 Alpha have exceeded safe thresholds. Immediate evacuation recommended.',
+      'location': 'LAT -6.2088, LNG 106.8456',
+      'actionText': 'ACKNOWLEDGE',
+      'color': AppColors.dangerRose,
+      'icon': Icons.warning,
+      'group': 'Hari Ini',
+    },
+    {
+      'title': 'Soil Instability Detected',
+      'level': 'SIAGA',
+      'time': '11:05',
+      'description': 'Minor tremors recorded. Potential landslide risk in Northern Ridge. Deploying drones for assessment.',
+      'location': 'SEC-7B NORTHEAST',
+      'actionText': 'VIEW MAP',
+      'color': AppColors.tertiaryContainer,
+      'icon': Icons.landslide,
+      'group': 'Hari Ini',
+    },
+    {
+      'title': 'Heavy Rainfall Warning',
+      'level': 'WASPADA',
+      'time': '08:45',
+      'description': 'Precipitation rates exceeding 50mm/hr in District Delta. Monitor drainage systems.',
+      'location': 'Resolved automatically',
+      'actionText': '',
+      'color': AppColors.warningAmber,
+      'icon': Icons.water_drop,
+      'locationIcon': Icons.history,
+      'group': 'Kemarin',
+    },
+    {
+      'title': 'System Integrity Check',
+      'level': 'AMAN',
+      'time': '02:00',
+      'description': 'Routine diagnostics completed successfully. All sensor arrays operating nominally.',
+      'location': '',
+      'actionText': '',
+      'color': AppColors.safeGreen,
+      'icon': Icons.verified,
+      'opacity': 0.75,
+      'group': 'Kemarin',
+    },
+  ];
+
+  @override
   Widget build(BuildContext context) {
+    // Filter logic
+    final filteredAlerts = _alertsData.where((alert) {
+      final text = '${alert['title']} ${alert['description']} ${alert['level']}'.toLowerCase();
+      return text.contains(_searchQuery.toLowerCase());
+    }).toList();
+
+    final hariIniAlerts = filteredAlerts.where((a) => a['group'] == 'Hari Ini').toList();
+    final kemarinAlerts = filteredAlerts.where((a) => a['group'] == 'Kemarin').toList();
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -71,63 +136,80 @@ class NotificationCenterScreen extends StatelessWidget {
           ),
           const SizedBox(height: 24),
 
-          // Hari Ini
-          _buildSectionHeader(context, 'Hari Ini'),
-          const SizedBox(height: 12),
-          _buildAlertCard(
-            context,
-            title: 'Critical Flood Level',
-            level: 'BAHAYA',
-            time: '14:22',
-            description: 'Water levels in Sector 4 Alpha have exceeded safe thresholds. Immediate evacuation recommended.',
-            location: 'LAT -6.2088, LNG 106.8456',
-            actionText: 'ACKNOWLEDGE',
-            color: AppColors.dangerRose,
-            icon: Icons.warning,
+          // Search Field
+          TextField(
+            onChanged: (val) {
+              setState(() {
+                _searchQuery = val;
+              });
+            },
+            style: const TextStyle(color: AppColors.textPrimary),
+            decoration: InputDecoration(
+              hintText: 'Cari alert...',
+              hintStyle: const TextStyle(color: AppColors.textSecondary),
+              prefixIcon: const Icon(Icons.search, color: AppColors.accentCyan),
+              filled: true,
+              fillColor: AppColors.surfaceContainerHigh,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
+              ),
+              contentPadding: const EdgeInsets.symmetric(vertical: 0),
+            ),
           ),
-          const SizedBox(height: 12),
-          _buildAlertCard(
-            context,
-            title: 'Soil Instability Detected',
-            level: 'SIAGA',
-            time: '11:05',
-            description: 'Minor tremors recorded. Potential landslide risk in Northern Ridge. Deploying drones for assessment.',
-            location: 'SEC-7B NORTHEAST',
-            actionText: 'VIEW MAP',
-            color: AppColors.tertiaryContainer, // e89337 - similar to orange
-            icon: Icons.landslide,
-          ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 24),
 
-          // Kemarin
-          _buildSectionHeader(context, 'Kemarin'),
-          const SizedBox(height: 12),
-          _buildAlertCard(
-            context,
-            title: 'Heavy Rainfall Warning',
-            level: 'WASPADA',
-            time: '08:45',
-            description: 'Precipitation rates exceeding 50mm/hr in District Delta. Monitor drainage systems.',
-            location: 'Resolved automatically',
-            actionText: '',
-            color: AppColors.warningAmber,
-            icon: Icons.water_drop,
-            locationIcon: Icons.history,
-          ),
-          const SizedBox(height: 12),
-          _buildAlertCard(
-            context,
-            title: 'System Integrity Check',
-            level: 'AMAN',
-            time: '02:00',
-            description: 'Routine diagnostics completed successfully. All sensor arrays operating nominally.',
-            location: '',
-            actionText: '',
-            color: AppColors.safeGreen,
-            icon: Icons.verified,
-            opacity: 0.75,
-          ),
-          const SizedBox(height: 32),
+          if (filteredAlerts.isEmpty)
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.all(32.0),
+                child: Text('Tidak ada alert yang sesuai.', style: TextStyle(color: AppColors.textSecondary)),
+              ),
+            ),
+
+          if (hariIniAlerts.isNotEmpty) ...[
+            _buildSectionHeader(context, 'Hari Ini'),
+            const SizedBox(height: 12),
+            ...hariIniAlerts.map((a) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: _buildAlertCard(
+                context,
+                title: a['title'],
+                level: a['level'],
+                time: a['time'],
+                description: a['description'],
+                location: a['location'],
+                actionText: a['actionText'],
+                color: a['color'],
+                icon: a['icon'],
+                locationIcon: a['locationIcon'] ?? Icons.location_on,
+                opacity: a['opacity'] ?? 1.0,
+              ),
+            )),
+            const SizedBox(height: 20),
+          ],
+
+          if (kemarinAlerts.isNotEmpty) ...[
+            _buildSectionHeader(context, 'Kemarin'),
+            const SizedBox(height: 12),
+            ...kemarinAlerts.map((a) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: _buildAlertCard(
+                context,
+                title: a['title'],
+                level: a['level'],
+                time: a['time'],
+                description: a['description'],
+                location: a['location'],
+                actionText: a['actionText'],
+                color: a['color'],
+                icon: a['icon'],
+                locationIcon: a['locationIcon'] ?? Icons.location_on,
+                opacity: a['opacity'] ?? 1.0,
+              ),
+            )),
+            const SizedBox(height: 20),
+          ],
         ],
       ),
     );

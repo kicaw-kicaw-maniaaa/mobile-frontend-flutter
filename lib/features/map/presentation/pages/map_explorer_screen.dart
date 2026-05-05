@@ -5,6 +5,8 @@ import 'dart:ui' as ui;
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../widgets/location_risk_detail_sheet.dart';
+import 'dart:async';
+import 'dart:math';
 
 class MapExplorerScreen extends StatefulWidget {
   const MapExplorerScreen({super.key});
@@ -15,6 +17,32 @@ class MapExplorerScreen extends StatefulWidget {
 
 class _MapExplorerScreenState extends State<MapExplorerScreen> {
   final MapController _mapController = MapController();
+  Timer? _scanTimer;
+  int _secureCount = 12;
+  int _criticalCount = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    _startScanSimulation();
+  }
+
+  void _startScanSimulation() {
+    _scanTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
+      if (mounted) {
+        setState(() {
+          _secureCount = 10 + Random().nextInt(5); // 10 to 14
+          _criticalCount = Random().nextInt(3); // 0 to 2
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scanTimer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -210,7 +238,39 @@ class _MapExplorerScreenState extends State<MapExplorerScreen> {
                         children: [
                           IconButton(
                             icon: const Icon(Icons.search, color: AppColors.accentCyan),
-                            onPressed: () {},
+                            onPressed: () {
+                              showModalBottomSheet(
+                                context: context,
+                                backgroundColor: AppColors.surfaceMain,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                                ),
+                                builder: (context) => Padding(
+                                  padding: const EdgeInsets.all(24.0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      TextField(
+                                        decoration: InputDecoration(
+                                          hintText: 'Cari koordinat atau zona...',
+                                          hintStyle: TextStyle(color: AppColors.textSecondary),
+                                          prefixIcon: const Icon(Icons.search, color: AppColors.accentCyan),
+                                          filled: true,
+                                          fillColor: AppColors.surfaceContainer,
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(12),
+                                            borderSide: BorderSide.none,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 16),
+                                      const Text('Riwayat Pencarian Kosong', style: TextStyle(color: AppColors.textSecondary)),
+                                      const SizedBox(height: 24),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                           const SizedBox(width: 8),
                           Container(
@@ -279,7 +339,7 @@ class _MapExplorerScreenState extends State<MapExplorerScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text('SECURE', style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 8)),
-                                  Text('12 Active', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.safeGreen)),
+                                  Text('$_secureCount Active', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.safeGreen)),
                                 ],
                               ),
                             ),
@@ -297,7 +357,7 @@ class _MapExplorerScreenState extends State<MapExplorerScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text('CRITICAL', style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 8)),
-                                  Text('1 Detected', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.dangerRose)),
+                                  Text('$_criticalCount Detected', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: _criticalCount > 0 ? AppColors.dangerRose : AppColors.safeGreen)),
                                 ],
                               ),
                             ),

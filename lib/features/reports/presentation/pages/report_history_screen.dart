@@ -2,11 +2,60 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 
-class ReportHistoryScreen extends StatelessWidget {
+class ReportHistoryScreen extends StatefulWidget {
   const ReportHistoryScreen({super.key});
 
   @override
+  State<ReportHistoryScreen> createState() => _ReportHistoryScreenState();
+}
+
+class _ReportHistoryScreenState extends State<ReportHistoryScreen> {
+  String _searchQuery = '';
+
+  final List<Map<String, dynamic>> _reportsData = [
+    {
+      'title': 'Terrain Instability Detected',
+      'status': 'Pending',
+      'statusColor': AppColors.warningAmber,
+      'description': 'Significant soil displacement observed along Sector 7G perimeter scanning grid. Structural integrity of secondary retaining wall may be compromised due to recent hydrological shifts.',
+      'location': '48°52\'3.9"N 2°19\'59.9"E',
+      'time': '2023-10-27T14:32:00Z',
+      'refId': 'REF: RPT-894-ALPHA',
+      'icon': Icons.landslide,
+      'showImage': true,
+    },
+    {
+      'title': 'Hydrological Override',
+      'status': 'Verified',
+      'statusColor': AppColors.safeGreen,
+      'description': 'Water levels in Sub-basement C have exceeded operational thresholds by 14%. Pumps engaged, but drainage velocity is below optimal parameters.',
+      'location': '',
+      'time': '2023-10-26T08:15:22Z',
+      'refId': 'REF: RPT-893-BETA',
+      'icon': Icons.flood,
+      'showImage': false,
+    },
+    {
+      'title': 'Telemetry Loss',
+      'status': 'Resolved',
+      'statusColor': AppColors.textSecondary,
+      'description': '',
+      'location': '',
+      'time': '2023-10-25T22:01:45Z',
+      'refId': '',
+      'icon': Icons.sensors_off,
+      'showImage': false,
+      'opacity': 0.7,
+    },
+  ];
+
+  @override
   Widget build(BuildContext context) {
+    final filteredReports = _reportsData.where((r) {
+      final text = '${r['title']} ${r['description']} ${r['refId']} ${r['status']}'.toLowerCase();
+      return text.contains(_searchQuery.toLowerCase());
+    }).toList();
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -40,6 +89,28 @@ class ReportHistoryScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
+          // Search Field
+          TextField(
+            onChanged: (val) {
+              setState(() {
+                _searchQuery = val;
+              });
+            },
+            style: const TextStyle(color: AppColors.textPrimary),
+            decoration: InputDecoration(
+              hintText: 'Cari laporan...',
+              hintStyle: const TextStyle(color: AppColors.textSecondary),
+              prefixIcon: const Icon(Icons.search, color: AppColors.accentCyan),
+              filled: true,
+              fillColor: AppColors.surfaceContainerHigh,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
+              ),
+              contentPadding: const EdgeInsets.symmetric(vertical: 0),
+            ),
+          ),
+          const SizedBox(height: 16),
           Row(
             children: [
               _buildActionButton(context, Icons.filter_list, 'Filter'),
@@ -49,42 +120,31 @@ class ReportHistoryScreen extends StatelessWidget {
           ),
           const SizedBox(height: 24),
 
+          if (filteredReports.isEmpty)
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.all(32.0),
+                child: Text('Tidak ada laporan yang sesuai.', style: TextStyle(color: AppColors.textSecondary)),
+              ),
+            ),
+
           // Cards
-          _buildReportCard(
-            context,
-            title: 'Terrain Instability Detected',
-            status: 'Pending',
-            statusColor: AppColors.warningAmber,
-            description: 'Significant soil displacement observed along Sector 7G perimeter scanning grid. Structural integrity of secondary retaining wall may be compromised due to recent hydrological shifts.',
-            location: '48°52\'3.9"N 2°19\'59.9"E',
-            time: '2023-10-27T14:32:00Z',
-            refId: 'REF: RPT-894-ALPHA',
-            icon: Icons.landslide,
-            showImage: true,
-          ),
-          const SizedBox(height: 16),
-          _buildReportCard(
-            context,
-            title: 'Hydrological Override',
-            status: 'Verified',
-            statusColor: AppColors.safeGreen,
-            description: 'Water levels in Sub-basement C have exceeded operational thresholds by 14%. Pumps engaged, but drainage velocity is below optimal parameters.',
-            time: '2023-10-26T08:15:22Z',
-            refId: 'REF: RPT-893-BETA',
-            icon: Icons.flood,
-          ),
-          const SizedBox(height: 16),
-          _buildReportCard(
-            context,
-            title: 'Telemetry Loss',
-            status: 'Resolved',
-            statusColor: AppColors.textSecondary,
-            description: '',
-            time: '2023-10-25T22:01:45Z',
-            refId: '',
-            icon: Icons.sensors_off,
-            opacity: 0.7,
-          ),
+          ...filteredReports.map((r) => Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            child: _buildReportCard(
+              context,
+              title: r['title'],
+              status: r['status'],
+              statusColor: r['statusColor'],
+              description: r['description'],
+              location: r['location'] ?? '',
+              time: r['time'],
+              refId: r['refId'] ?? '',
+              icon: r['icon'],
+              showImage: r['showImage'] ?? false,
+              opacity: r['opacity'] ?? 1.0,
+            ),
+          )),
           const SizedBox(height: 32),
         ],
       ),

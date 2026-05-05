@@ -2,8 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  final Map<String, bool> _preferences = {
+    'Critical Alerts': true,
+    'Zone Updates': true,
+    'System Logs': false,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -184,9 +195,9 @@ class ProfileScreen extends StatelessWidget {
             icon: Icons.notifications_active,
             title: 'Notification Preferences',
             children: [
-              _buildToggleItem(context, 'Critical Alerts', 'Immediate spatial breaches.', true),
-              _buildToggleItem(context, 'Zone Updates', 'Changes in layer statuses.', true),
-              _buildToggleItem(context, 'System Logs', 'Routine maintenance reports.', false),
+              _buildToggleItem(context, 'Critical Alerts', 'Immediate spatial breaches.'),
+              _buildToggleItem(context, 'Zone Updates', 'Changes in layer statuses.'),
+              _buildToggleItem(context, 'System Logs', 'Routine maintenance reports.'),
             ],
           ),
           const SizedBox(height: 24),
@@ -269,7 +280,7 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildToggleItem(BuildContext context, String title, String subtitle, bool initialValue) {
+  Widget _buildToggleItem(BuildContext context, String title, String subtitle) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: Row(
@@ -297,8 +308,12 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           Switch(
-            value: initialValue,
-            onChanged: (val) {},
+            value: _preferences[title] ?? false,
+            onChanged: (val) {
+              setState(() {
+                _preferences[title] = val;
+              });
+            },
             activeThumbColor: AppColors.accentCyan,
             activeTrackColor: AppColors.accentCyan.withAlpha(100),
             inactiveThumbColor: AppColors.textSecondary,
