@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -201,7 +202,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               SizedBox(
                                 width: double.infinity,
                                 child: ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    context.go('/map');
+                                  },
                                   child: const Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
